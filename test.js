@@ -21,7 +21,6 @@ nightmare
 		const $ = cheerio.load(response);
 		let data = [];
 		let scriptLength = $('script').length;
-		console.log("script length: ",scriptLength);
 
 		for (var i = 0; i < scriptLength; i++) {
 			if(typeof $('script')[i].children[0] != "undefined" && 
@@ -31,7 +30,6 @@ nightmare
 						let jsonStr = $('script')[i].children[0].data;
 						jsonStr = jsonStr.split("window.pageData=")[1];    
 						data = JSON.parse(jsonStr);
-						console.log("Data: ",data);
 						let products = data['mods']['listItems'];
 				  		console.log("Number of products found:",(products.length));
 						for (var i = 0; i < products.length; i++) {

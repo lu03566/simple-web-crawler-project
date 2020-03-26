@@ -1,42 +1,44 @@
-/*// pl-scraper.js
+/**
+ * Require the puppeteer library.
+ */
+const puppeteer = require('puppeteer');
 
-    const axios = require('axios');
-    const cheerio = require('cheerio');
+/**
+ * Inside the main function we'll place all the required code
+ * that will be used in the scraping process.
+ * The reason why we create an async function is to use
+ * the power of async programming  that comes with puppeteer.
+ */
+async function main() {
+  /**
+   * Launch Chromium. By setting `headless` key to false,
+   * we can see the browser UI.
+   */
+  const browser = await puppeteer.launch({
+    headless: false,
+    args: ['--proxy-server=socks5://127.0.0.1:9054']
 
-    const url = 'https://www.premierleague.com/stats/top/players/goals?se=-1&cl=-1&iso=-1&po=-1?se=-1';
+  });
 
-    axios(url)
-      .then(response => {
-        const html = response.data;
-        const $ = cheerio.load(html);
-        $('script').each((i, e) => {
-            if (typeof $('script')[i].children[0] !== 'undefined') {
-                // the variable is defined
-                console.log("result :",$('script')[i].children[0].data);
+  /**
+   * Create a new page.
+   */
+  const page = await browser.newPage();
 
-            }
-        });  
-      })
-      .catch(console.error);*/
+  /**
+   * Using the newly created page, navigate to https://api.ipify.org
+   */
+  await page.goto('https://api.ipify.org');
 
+  /**
+   * Wait 3 seconds and then close the browser instance.
+   */
+  setTimeout(() => {
+    browser.close();
+  }, 3000);
+}
 
-// reddit-scraper.js
-
-    const cheerio = require('cheerio');
-    const puppeteer = require('puppeteer');
-
-    const url = 'https://www.lazada.com.my/catalog/?from=input&q=asdf&price=100-';
-
-    puppeteer
-      .launch()
-      .then(browser => browser.newPage())
-      .then(page => {
-        return page.goto(url).then(function() {
-          return page.content();
-        });
-      })
-      .then(html => {
-        const $ = cheerio.load(html);
-        console.log("result :", $('a[href*="//www.lazada.com.my/products/"]')[0]);
-      })
-      .catch(console.error);
+/**
+ * Start the script by calling main().
+ */
+main();
